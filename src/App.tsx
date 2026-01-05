@@ -6,12 +6,12 @@ import Login from './pages/Login';
 import UserList from './pages/UserList';
 import UserEdit from './pages/UserEdit';
 
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
-}
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
+};
 
-function AppRoutes() {
+const AppRoutes = () => {
   // アプリ起動時にJSONPlaceholderからユーザーデータを取得
   useEffect(() => {
     initializeUsersFromAPI();
@@ -39,9 +39,9 @@ function AppRoutes() {
       <Route path="/" element={<Navigate to="/users" replace />} />
     </Routes>
   );
-}
+};
 
-function App() {
+const App = () => {
   return (
     <AuthProvider>
       <Router>
@@ -51,6 +51,6 @@ function App() {
       </Router>
     </AuthProvider>
   );
-}
+};
 
 export default App;

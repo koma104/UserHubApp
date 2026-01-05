@@ -1,21 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { getUsers, saveUsers, saveCurrentUser } from '../utils/localStorage';
+import { removePasswordFromUser } from '../utils/userUtils';
+import { User } from '../types/users';
 
-interface User {
-  id: string;
-  email: string;
-  name: string;
-  password?: string;
-}
-
-export default function UserEdit() {
-  const { id } = useParams<{ id: string }>();
+const UserEdit = () => {
+  const { id: userId } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user: currentUser } = useAuth();
+  const { currentUser } = useAuth();
 
   // 自分のプロフィールのみ編集可能
-  const canEdit = currentUser?.id === id;
+  const canEdit = currentUser?.id === userId;
 
   const [formData, setFormData] = useState({
     name: '',
@@ -27,20 +23,20 @@ export default function UserEdit() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (id) {
+    if (userId) {
       // 自分のプロフィールでない場合は一覧にリダイレクト
       if (!canEdit) {
         navigate('/users');
         return;
       }
-      loadUser(id);
+      loadUser(userId);
     }
-  }, [id, canEdit, navigate]);
+  }, [userId, canEdit, navigate]);
 
   const loadUser = (userId: string) => {
     try {
-      const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
-      const user = storedUsers.find((u: User) => u.id === userId);
+      const users = getUsers();
+      const user = users.find((u) => u.id === userId);
       if (user) {
         setFormData({
           name: user.name || '',
@@ -84,10 +80,10 @@ export default function UserEdit() {
     setIsLoading(true);
 
     try {
-      const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+      const users = getUsers();
 
       // 既存ユーザー更新（自分のプロフィールのみ）
-      const userIndex = storedUsers.findIndex((u: User) => u.id === id);
+      const userIndex = users.findIndex((u: User) => u.id === userId);
       if (userIndex === -1) {
         setError('ユーザーが見つかりません');
         setIsLoading(false);
@@ -95,7 +91,7 @@ export default function UserEdit() {
       }
 
       // メールアドレスの重複チェック（自分以外）
-      const emailExists = storedUsers.some(
+      const emailExists = users.some(
         (u: User, index: number) => u.email === formData.email && index !== userIndex
       );
       if (emailExists) {
@@ -104,19 +100,21 @@ export default function UserEdit() {
         return;
       }
 
-      storedUsers[userIndex] = {
-        ...storedUsers[userIndex],
+      // ユーザー情報を更新
+      const updatedUser: User = {
+        ...users[userIndex],
         name: formData.name,
         email: formData.email,
         ...(formData.password && { password: formData.password }),
       };
 
-      // 現在のログインユーザーを更新（パスワードを除外）
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...userWithoutPassword } = storedUsers[userIndex];
-      localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
+      users[userIndex] = updatedUser;
+      saveUsers(users);
 
-      localStorage.setItem('users', JSON.stringify(storedUsers));
+      // 現在のログインユーザーを更新（パスワードを除外）
+      const userWithoutPassword = removePasswordFromUser(updatedUser);
+      saveCurrentUser(userWithoutPassword);
+
       navigate('/users');
     } catch (error) {
       console.error('ユーザーの保存に失敗しました:', error);
@@ -237,4 +235,6 @@ export default function UserEdit() {
       </main>
     </div>
   );
-}
+};
+
+export default UserEdit;

@@ -1,18 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { getUsers } from '../utils/localStorage';
+import { removePasswordFromUsers } from '../utils/userUtils';
+import { UserWithoutPassword } from '../types/users';
 
-interface User {
-  id: string;
-  email: string;
-  name: string;
-  username?: string;
-}
-
-export default function UserList() {
-  const [users, setUsers] = useState<User[]>([]);
+const UserList = () => {
+  const [users, setUsers] = useState<UserWithoutPassword[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { user: currentUser, logout } = useAuth();
+  const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,16 +17,9 @@ export default function UserList() {
 
   const loadUsers = () => {
     try {
-      const storedUsers = localStorage.getItem('users');
-      if (storedUsers) {
-        const parsedUsers = JSON.parse(storedUsers);
-        // パスワードを除外
-        const usersWithoutPassword = parsedUsers.map(
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          ({ password, ...user }: User & { password?: string }) => user
-        );
-        setUsers(usersWithoutPassword);
-      }
+      const allUsers = getUsers();
+      const usersWithoutPassword = removePasswordFromUsers(allUsers);
+      setUsers(usersWithoutPassword);
     } catch (error) {
       console.error('ユーザーの読み込みに失敗しました:', error);
     } finally {
@@ -128,4 +117,6 @@ export default function UserList() {
       </main>
     </div>
   );
-}
+};
+
+export default UserList;
