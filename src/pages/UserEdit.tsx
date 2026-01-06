@@ -8,7 +8,7 @@ import { User } from '../types/users';
 const UserEdit = () => {
   const { id: userId } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  const { currentUser, updateCurrentUser } = useAuth();
 
   // 自分のプロフィールのみ編集可能
   const canEdit = currentUser?.id === userId;
@@ -114,6 +114,7 @@ const UserEdit = () => {
       // 現在のログインユーザーを更新（パスワードを除外）
       const userWithoutPassword = removePasswordFromUser(updatedUser);
       saveCurrentUser(userWithoutPassword);
+      updateCurrentUser(userWithoutPassword);
 
       navigate('/users');
     } catch (error) {
