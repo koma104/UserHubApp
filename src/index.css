@@ -9,3 +9,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+@layer components {
+  /* アコーディオンUIのスタイル */
+  .accordion-details summary::-webkit-details-marker {
+    display: none;
+  }
+  
+  .accordion-details[open] .accordion-icon {
+    transform: rotate(180deg);
+  }
+}
