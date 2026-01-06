@@ -35,11 +35,47 @@ const Login = () => {
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">UserHub App</h2>
           <p className="mt-2 text-center text-sm text-gray-600">アカウントにログインしてください</p>
-          <p className="mt-2 text-center text-xs text-gray-500">
-            JSONPlaceholderのユーザーでログインできます
-            <br />
-            デフォルトパスワード: <span className="font-mono">password123</span>
-          </p>
+          <details className="accordion-details mt-3 bg-blue-50 rounded-md border border-blue-200 overflow-hidden">
+            <summary className="cursor-pointer list-none p-3 text-xs text-gray-700 font-semibold flex items-center justify-between">
+              <span>JSONPlaceholderのユーザーでログインできます</span>
+              <span className="accordion-icon ml-2 transition-transform duration-300 ease-in-out">
+                <svg
+                  className="w-4 h-4 text-gray-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </span>
+            </summary>
+            <div className="accordion-content px-3 pb-3 pt-2 space-y-2">
+              <p className="text-xs text-gray-600">
+                メールアドレス例:{' '}
+                <span className="font-mono text-indigo-600">Sincere@april.biz</span>
+              </p>
+              <p className="text-xs text-gray-600">
+                パスワード: <span className="font-mono text-indigo-600">password123</span>
+                （全ユーザー共通）
+              </p>
+              <p className="text-xs text-gray-500">
+                <a
+                  href="https://jsonplaceholder.typicode.com/users/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo-600 hover:text-indigo-800 underline"
+                >
+                  全ユーザー一覧を確認 →
+                </a>
+              </p>
+            </div>
+          </details>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
