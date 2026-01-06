@@ -10,6 +10,7 @@ UserHub App は、ユーザーのログイン、一覧表示、編集・保存�
 ## 機能
 
 - 🔐 **ログイン機能**: JSONPlaceholder のユーザーでログイン（デフォルトパスワード: `password123`）
+  - ログイン情報をアコーディオン UI で折りたたみ表示
 - 📥 **データ取得**: アプリ起動時に JSONPlaceholder API からユーザーデータを自動取得
 - 💾 **LocalStorage 保存**: 取得したユーザーデータを LocalStorage に保存
 - 👥 **ユーザー一覧**: 登録されている全ユーザーの表示
@@ -62,12 +63,17 @@ npm run preview
 userhub-app/
 ├── src/
 │   ├── contexts/       # 認証コンテキスト
+│   │   └── AuthContext.tsx
 │   ├── pages/          # ページコンポーネント
 │   │   ├── Login.tsx   # ログインページ
 │   │   ├── UserList.tsx # ユーザー一覧ページ
 │   │   └── UserEdit.tsx # ユーザー編集ページ
+│   ├── types/          # 型定義
+│   │   └── users.ts
 │   ├── utils/          # ユーティリティ関数
-│   │   └── api.ts      # JSONPlaceholder API関連
+│   │   ├── api.ts      # JSONPlaceholder API関連
+│   │   ├── localStorage.ts # LocalStorage操作
+│   │   └── userUtils.ts # ユーザー関連ユーティリティ
 │   ├── App.tsx         # メインアプリケーション
 │   ├── main.tsx        # エントリーポイント
 │   └── index.css       # グローバルスタイル
@@ -90,6 +96,8 @@ JSONPlaceholder のユーザーでログインできます：
 
 - **メールアドレス**: JSONPlaceholder のユーザーのメールアドレス（例: `Sincere@april.biz`）
 - **パスワード**: `password123`（全ユーザー共通のデフォルトパスワード）
+
+ログイン画面では、アコーディオン UI でログイン情報（メールアドレス例、パスワード、全ユーザー一覧へのリンク）を確認できます。
 
 ## 今後の予定
 
