@@ -146,7 +146,7 @@ const UserEdit = () => {
       <main className="max-w-2xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="bg-white shadow rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">プロフィール編集</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">プロフィール変更</h2>
 
             {error && (
               <div className="mb-4 rounded-md bg-red-50 p-4">

@@ -70,7 +70,7 @@ const UserList = () => {
               onClick={() => navigate(`/users/${currentUser?.id}/edit`)}
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              自分のプロフィールを編集
+              プロフィール変更
             </button>
           </div>
 
@@ -101,7 +101,7 @@ const UserList = () => {
                             onClick={() => handleEdit(user.id)}
                             className="px-3 py-1 text-sm font-medium text-indigo-600 hover:text-indigo-900"
                           >
-                            自分のプロフィールを編集
+                            変更する
                           </button>
                         ) : (
                           <span className="px-3 py-1 text-sm text-gray-400">閲覧のみ</span>
